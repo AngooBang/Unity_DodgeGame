@@ -29,7 +29,21 @@ public class BulletSpawner : MonoBehaviour
             _elapsedTime = 0f;
 
             GameObject bullet = Instantiate(BulletPrefab, transform.position, transform.rotation);
-            bullet.transform.LookAt(Target);
+
+            float angle = Vector3.Angle(Target.transform.position - bullet.transform.position, bullet.transform.forward);
+
+            Vector3 normalVector = Vector3.Cross(Target.transform.position - bullet.transform.position, bullet.transform.forward);
+
+            if (Vector3.Dot(Vector3.up, normalVector) < 0f)
+            {
+                bullet.transform.rotation = bullet.transform.rotation * Quaternion.Euler(0, angle, 0);
+            }
+            else
+            { 
+                bullet.transform.rotation = bullet.transform.rotation * Quaternion.Euler(0, -angle, 0);
+            }
+
+        
 
             _spawnRate = getRandomSpawnRate();
 
